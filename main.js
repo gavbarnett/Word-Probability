@@ -46,11 +46,45 @@ function Book(wholetext) {
     });
     return output;
   }
-  this.nextword = function (start){
-    var output = []
-    for (i = 0; i<this.splitext.length; i++){
-      if (this.splitext[i] == start){
-        output.push(this.splitext[i+1])
+  this.nextword = function (start, phrase, distance){
+    var tempsplit = this.splitext;
+    var phraseword = phrase;
+    var output = [];
+    for (i = 0; i<tempsplit.length; i++){
+      if (tempsplit[i] == start){
+        if (!output.includes(tempsplit[i+1])){
+          output.push(tempsplit[i+1]);
+          output.push(tempsplit[i+1]);
+          output.push(tempsplit[i+1]);
+        }
+      }
+    }
+   console.log("output: " + output);
+    var temp = [];
+    for (j = 0; j<phraseword.length; j++){
+      for (i = 0; i<tempsplit.length; i++){
+        if (tempsplit[i] == phraseword[j]){
+          if (!temp.includes(tempsplit[i+1])){
+            temp.push(tempsplit[i+1]);
+            temp.push(tempsplit[i+1]);
+          }
+          if (!temp.includes(tempsplit[i-1])){
+            temp.push(tempsplit[i-1]);
+            temp.push(tempsplit[i+1]);
+          }
+          if (!temp.includes(tempsplit[i+2])){
+            temp.push(tempsplit[i+2]);
+          }
+          if (!temp.includes(tempsplit[i-2])){
+            temp.push(tempsplit[i-2]);
+          }
+        }
+      }
+    }
+    //console.log("temp: " + temp);
+    for (j = 0; j<temp.length; j++){
+      if (output.includes(temp[j])){
+          output.push(temp[j]);
       }
     }
     return output;
@@ -101,11 +135,12 @@ function updateGameArea() {
     ctx.fillStyle = 'hsl(182, 100%, 75% )';
     ctx.textAlign = "left";
     var text;
+    var list = [];
     m = Math.round(Math.random()*readbook.length);
     var word = [];
     word[0] = readbook[m];
     for (x = 1; x<25; x++){
-      var list = book.nextword(word[x-1]);
+      list = book.nextword(word[x-1], word,2);
       word[x] = list[Math.round(Math.random()*list.length)];
     }
     text = word.join(" ");
